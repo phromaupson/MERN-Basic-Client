@@ -8,12 +8,17 @@ import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./reducer/index";
 
+//Router
+import { BrowserRouter } from "react-router-dom";
+
 const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
   //<React.StrictMode>
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   //</React.StrictMode>
   document.getElementById("root")
