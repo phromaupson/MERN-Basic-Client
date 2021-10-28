@@ -7,3 +7,11 @@ export const registerHandler = async (user) => {
     },
   });
 };
+
+export const loginHandler = async (user) => {
+  return await axios.post(process.env.REACT_APP_API + "/login", user, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
