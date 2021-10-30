@@ -18,6 +18,8 @@ import { Switch, Route } from "react-router-dom";
 import Login from "./component/pages/auth/Login";
 import Register from "./component/pages/auth/Register";
 import Home from "./component/pages/Home";
+import AdminDashboard from "./component/pages/admin/AdminDashboard";
+import UserDashboard from "./component/pages/user/UserDashboard";
 
 //Redux
 import { useDispatch } from "react-redux";
@@ -58,6 +60,8 @@ function App() {
         <Route exact path="/" component={Home} />{" "}
         <Route exact path="/login" component={Login} />{" "}
         <Route exact path="/register" component={Register} />{" "}
+        <Route exact path="/admin/dashboard" component={AdminDashboard} />{" "}
+        <Route exact path="/user/dashboard" component={UserDashboard} />{" "}
       </Switch>{" "}
     </div>
   );
