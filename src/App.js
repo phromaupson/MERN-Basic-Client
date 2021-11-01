@@ -13,6 +13,7 @@ import Navbar from "./component/layout/Navbar";
 
 //Router
 import { Switch, Route } from "react-router-dom";
+import UserRoute from "./component/routes/UserRoute";
 
 //Pages
 import Login from "./component/pages/auth/Login";
@@ -61,7 +62,7 @@ function App() {
         <Route exact path="/login" component={Login} />{" "}
         <Route exact path="/register" component={Register} />{" "}
         <Route exact path="/admin/dashboard" component={AdminDashboard} />{" "}
-        <Route exact path="/user/dashboard" component={UserDashboard} />{" "}
+        <UserRoute exact path="/user/dashboard" component={UserDashboard} />{" "}
       </Switch>{" "}
     </div>
   );
