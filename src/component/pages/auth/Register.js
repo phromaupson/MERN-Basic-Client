@@ -23,7 +23,8 @@ function Register({ history }) {
     setLoading(true);
     e.preventDefault();
     if (password !== password2) {
-      console.log("no match");
+      toast.error("password not match");
+      setLoading(false);
     } else {
       //
       const newUser = {
@@ -73,7 +74,11 @@ function Register({ history }) {
               placeholder="Comfirm Password"
               onChange={(e) => onChange(e)}
             />
-            <button className="btn btn-success" type="submit">
+            <button
+              className="btn btn-success"
+              type="submit"
+              disabled={password.length < 6}
+            >
               Submit
             </button>
           </form>

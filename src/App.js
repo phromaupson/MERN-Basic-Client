@@ -21,6 +21,7 @@ import Login from "./component/pages/auth/Login";
 import Register from "./component/pages/auth/Register";
 import Home from "./component/pages/Home";
 import AdminDashboard from "./component/pages/admin/AdminDashboard";
+import AdminCreatePerson from "./component/pages/admin/AdminCreatePerson";
 import UserDashboard from "./component/pages/user/UserDashboard";
 
 //Redux
@@ -63,6 +64,11 @@ function App() {
         <Route exact path="/login" component={Login} />{" "}
         <Route exact path="/register" component={Register} />{" "}
         <AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />{" "}
+        <AdminRoute
+          exact
+          path="/admin/create-person"
+          component={AdminCreatePerson}
+        />{" "}
         <UserRoute exact path="/user/dashboard" component={UserDashboard} />{" "}
       </Switch>{" "}
     </div>
