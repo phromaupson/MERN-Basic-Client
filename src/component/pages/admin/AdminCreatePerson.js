@@ -1,23 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminNav from "../../layout/AdminNav";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Table, Tag, Space } from "antd";
 
-import { createPerson } from "../../functions/person";
+import { createPerson, getPerson } from "../../functions/person";
 
 const AdminCreatePerson = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [person, setPerson] = useState([]);
+
+  useEffect(() => {
+    loadPerson(user.token);
+  }, [user.token]);
+  const loadPerson = (authtoken) => {
+    getPerson(authtoken)
+      .then((res) => {
+        setPerson(res.data);
+      })
+      .catch((err) => {
+        toast.error(err);
+        console.log(err);
+      });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     createPerson(name, user.token)
       .then((res) => {
-        console.log(res);
+        loadPerson(user.token);
         setLoading(false);
+        setName("");
+        toast.success("Create " + res.data.name + " Success");
       })
       .catch((err) => {
         setLoading(false);
@@ -25,15 +43,22 @@ const AdminCreatePerson = () => {
       });
   };
 
+  const columns = [
+    {
+      title: "ชื่อ",
+      dataIndex: "name",
+      key: "name",
+    },
+  ];
+
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-2">
           <AdminNav />
         </div>
-        <div>
-          <h4>Admin CreatePerson</h4>
-
+        <div className="col">
+          {loading ? <h4>Loading</h4> : <h4>Admin CreatePerson</h4>}
           <form onSubmit={onSubmit}>
             <div className="form-group">
               <label>ชื่อ</label>
@@ -47,6 +72,8 @@ const AdminCreatePerson = () => {
             </div>
             <button className="btn btn-outline-primary">Save</button>
           </form>
+          <hr />
+          <Table columns={columns} dataSource={person} />
         </div>
       </div>
     </div>
