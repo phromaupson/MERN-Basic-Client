@@ -15,3 +15,10 @@ export const getPerson = async(authtoken) =>
             authtoken,
         },
     });
+
+export const removePerson = async(id, authtoken) =>
+    await axios.delete(`${process.env.REACT_APP_API}/person/${id}`, {
+        headers: {
+            authtoken,
+        },
+    });

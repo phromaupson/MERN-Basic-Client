@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Table, Tag, Space } from "antd";
 
-import { createPerson, getPerson } from "../../functions/person";
+import { createPerson, getPerson, removePerson } from "../../functions/person";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const AdminCreatePerson = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -43,11 +44,38 @@ const AdminCreatePerson = () => {
       });
   };
 
+  const handleRemove = (id) => {
+    if (window.confirm("Are you sure Delete!")) {
+      setLoading(true);
+      removePerson(id, user.token)
+        .then((res) => {
+          loadPerson(user.token);
+          setLoading(false);
+          toast.success("Remove " + res.data.name + " Success");
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast.error(err.response);
+        });
+    }
+  };
+
   const columns = [
     {
       title: "ชื่อ",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "Actions",
+      render: (record) => (
+        <span
+          className="btn btn-sm fload-right"
+          onClick={() => handleRemove(record._id)}
+        >
+          <DeleteOutlined className="text-danger" />
+        </span>
+      ),
     },
   ];
 
@@ -68,12 +96,13 @@ const AdminCreatePerson = () => {
                 autoFocus
                 required
                 onChange={(e) => setName(e.target.value)}
+                value={name}
               />
             </div>
             <button className="btn btn-outline-primary">Save</button>
           </form>
           <hr />
-          <Table columns={columns} dataSource={person} />
+          <Table columns={columns} dataSource={person} rowKey="_id" />
         </div>
       </div>
     </div>
