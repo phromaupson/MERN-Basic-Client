@@ -22,6 +22,7 @@ import Register from "./component/pages/auth/Register";
 import Home from "./component/pages/Home";
 import AdminDashboard from "./component/pages/admin/AdminDashboard";
 import AdminCreatePerson from "./component/pages/admin/AdminCreatePerson";
+import AdminUpdatePerson from "./component/pages/admin/AdminUpdatePerson";
 import UserDashboard from "./component/pages/user/UserDashboard";
 
 //Redux
@@ -68,6 +69,11 @@ function App() {
           exact
           path="/admin/create-person"
           component={AdminCreatePerson}
+        />{" "}
+        <AdminRoute
+          exact
+          path="/admin/update-person/:id"
+          component={AdminUpdatePerson}
         />{" "}
         <UserRoute exact path="/user/dashboard" component={UserDashboard} />{" "}
       </Switch>{" "}

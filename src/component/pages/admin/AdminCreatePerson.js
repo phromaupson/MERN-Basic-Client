@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 import { Table, Tag, Space } from "antd";
 
 import { createPerson, getPerson, removePerson } from "../../functions/person";
-import { DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const AdminCreatePerson = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -69,12 +70,19 @@ const AdminCreatePerson = () => {
     {
       title: "Actions",
       render: (record) => (
-        <span
-          className="btn btn-sm fload-right"
-          onClick={() => handleRemove(record._id)}
-        >
-          <DeleteOutlined className="text-danger" />
-        </span>
+        <>
+          <span
+            className="btn btn-sm float-right"
+            onClick={() => handleRemove(record._id)}
+          >
+            <DeleteOutlined className="text-danger" />
+          </span>
+          <Link to={"/admin/update-person/" + record._id}>
+            <span className="btn btn-sm float-right">
+              <EditOutlined className="text-warning" />
+            </span>
+          </Link>
+        </>
       ),
     },
   ];
