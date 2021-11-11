@@ -14,6 +14,8 @@ const AdminCreatePerson = () => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [person, setPerson] = useState([]);
+  const [file, setFile] = useState("");
+  const [filename, setFilename] = useState("choose File");
 
   useEffect(() => {
     loadPerson(user.token);
@@ -32,7 +34,10 @@ const AdminCreatePerson = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createPerson(name, user.token)
+    const fromData = new FormData();
+    fromData.append("file", file);
+    fromData.append("data", name);
+    createPerson(fromData, user.token)
       .then((res) => {
         loadPerson(user.token);
         setLoading(false);
@@ -106,6 +111,16 @@ const AdminCreatePerson = () => {
                 onChange={(e) => setName(e.target.value)}
                 value={name}
               />
+            </div>
+            <div className="custom-file mb-4">
+              <input
+                type="file"
+                className="custom-file-input"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <label className="custom-file-label" htmlFor="customfile">
+                {filename}
+              </label>
             </div>
             <button className="btn btn-outline-primary">Save</button>
           </form>
