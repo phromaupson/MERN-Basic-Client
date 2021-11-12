@@ -8,6 +8,8 @@ import { createPerson, getPerson, removePerson } from "../../functions/person";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
+import { Progress } from "antd";
+
 const AdminCreatePerson = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -16,10 +18,11 @@ const AdminCreatePerson = () => {
   const [person, setPerson] = useState([]);
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("choose File");
-
+  const [uploadPerscentage, setUploadPerscenTage] = useState(0);
   useEffect(() => {
     loadPerson(user.token);
-  }, [user.token]);
+  }, [user.token, file]);
+
   const loadPerson = (authtoken) => {
     getPerson(authtoken)
       .then((res) => {
@@ -34,20 +37,23 @@ const AdminCreatePerson = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    const fromData = new FormData();
-    fromData.append("file", file);
-    fromData.append("data", name);
-    createPerson(fromData, user.token)
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("data", name);
+    createPerson(formData, user.token, setUploadPerscenTage)
       .then((res) => {
+        setName("");
+        setFilename("Choose files....");
+        setUploadPerscenTage(0);
         loadPerson(user.token);
         setLoading(false);
-        setName("");
         toast.success("Create " + res.data.name + " Success");
       })
       .catch((err) => {
         setLoading(false);
         toast.error(err.response);
       });
+    console.log(formData);
   };
 
   const handleRemove = (id) => {
@@ -116,11 +122,21 @@ const AdminCreatePerson = () => {
               <input
                 type="file"
                 className="custom-file-input"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  setFilename(e.target.files[0].name);
+                }}
               />
               <label className="custom-file-label" htmlFor="customfile">
                 {filename}
               </label>
+              <Progress
+                strokeColor={{
+                  "0%": "#108ee9",
+                  "100%": "#87d068",
+                }}
+                percent={uploadPerscentage}
+              />
             </div>
             <button className="btn btn-outline-primary">Save</button>
           </form>
