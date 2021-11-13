@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import AdminNav from "../../layout/AdminNav";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Table, Tag, Space } from "antd";
+import { Table, Avatar, Image } from "antd";
 
 import { createPerson, getPerson, removePerson } from "../../functions/person";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 import { Progress } from "antd";
+import moment from "moment/min/moment-with-locales";
 
 const AdminCreatePerson = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -77,6 +78,22 @@ const AdminCreatePerson = () => {
       title: "ชื่อ",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "วันที่",
+      render: (record) => (
+        <>{moment(record.date).locale("th").format("DD MMM YYYY")}</>
+      ),
+    },
+    {
+      title: "ไฟล์",
+      render: (record) => (
+        <>
+          <Avatar
+            src={<Image src={`http://localhost:8000/uploads/${record.pic}`} />}
+          />
+        </>
+      ),
     },
     {
       title: "Actions",
