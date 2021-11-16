@@ -2,13 +2,17 @@ import React, { useState, useEffect } from "react";
 import AdminNav from "../../layout/AdminNav";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { createPerson, getPersons, updatePerson } from "../../functions/person";
+import { getPersons, updatePerson } from "../../functions/person";
 
 const AdminUpdatePerson = ({ history, match }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [file, setFile] = useState("");
+  const [fileold, setFileold] = useState("");
+  const [filename, setFilename] = useState("");
 
   useEffect(() => {
     loadPerson(match.params.id, user.token);
@@ -17,6 +21,9 @@ const AdminUpdatePerson = ({ history, match }) => {
   const loadPerson = (id, authtoken) => {
     getPersons(id, authtoken)
       .then((res) => {
+        //console.log('res',res)
+        setFileold(res.data.pic);
+        setFilename(res.data.pic);
         setName(res.data.name);
       })
       .catch((err) => {
@@ -28,7 +35,14 @@ const AdminUpdatePerson = ({ history, match }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    updatePerson({ name }, match.params.id, user.token)
+
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("filename", filename);
+    formData.set("fileold", fileold);
+    formData.set("data", name);
+
+    updatePerson(formData, match.params.id, user.token)
       .then((res) => {
         loadPerson(user.token);
         setLoading(false);
@@ -61,6 +75,20 @@ const AdminUpdatePerson = ({ history, match }) => {
                 required
                 onChange={(e) => setName(e.target.value)}
               />
+            </div>
+
+            <div className="custom-file mb-4">
+              <input
+                type="file"
+                className="custom-file-input"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  setFilename(e.target.files[0].name);
+                }}
+              />
+              <label className="custom-file-label" htmlFor="customfile">
+                {filename}
+              </label>
             </div>
             <button className="btn btn-outline-primary">Update</button>
           </form>
